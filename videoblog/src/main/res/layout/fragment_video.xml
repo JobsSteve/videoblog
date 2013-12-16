@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity"
+    tools:ignore="MergeRootFrame">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/detail_view_date_time"
+        android:id="@+id/detailDateTimeTextView"
+        android:padding="15dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#888" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detailVidScreenShotImageView"
+        android:layout_below="@id/detailDateTimeTextView"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/vidscreenshotdetail" />
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:layout_below="@id/detailVidScreenShotImageView"
+        android:layout_alignLeft="@id/detailDateTimeTextView"
+        android:layout_alignRight="@id/detailDateTimeTextView"
+        android:padding="15dp"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_view_tag"
+            android:id="@+id/detailTagTextView"
+            android:textSize="18sp"
+            android:textColor="#888" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detailTagEditText"
+            android:layout_weight="1"
+            android:textSize="18sp" />
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/detail_add_button"
+            android:id="@+id/detailAddButton" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:padding="15dp"
+        android:id="@+id/tagsRelativeLayout">
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/tagsRelativeLayout"
+        android:text="@string/detail_notes_edit_text"
+        android:id="@+id/notesTextView"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:textColor="#888"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/notesEditText"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:padding="15dp" />
+
+
+</RelativeLayout>
+
