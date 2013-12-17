@@ -7,7 +7,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener {
+public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener, VideoListFragment.OnCameraSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,5 +98,14 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCameraSelected() {
+        CameraFragment cameraFragment = new CameraFragment();
+        getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.container,cameraFragment)
+                .commit();
     }
 }

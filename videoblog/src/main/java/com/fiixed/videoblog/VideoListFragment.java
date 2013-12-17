@@ -22,9 +22,13 @@ public class VideoListFragment extends Fragment {
     public static final String TAG = "VideoListFragment";
     VideoData[] mVideos = new VideoData[5];
     OnVideoSelectedListener mCallback;
+    OnCameraSelectedListener cameraCallback;
     private ListView listView;
 
 
+    public interface OnCameraSelectedListener {
+        public void onCameraSelected();
+    }
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnVideoSelectedListener {
         /**
@@ -58,7 +62,7 @@ public class VideoListFragment extends Fragment {
                 return true;
             case R.id.action_video:
                 Toast.makeText(getActivity(), "Tapped camera", Toast.LENGTH_SHORT).show();
-//                getCameraInstance();
+                cameraCallback.onCameraSelected();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -69,8 +73,9 @@ public class VideoListFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         //make sure the activity we're attached to actually has implemented the right callback method
-        if (activity instanceof OnVideoSelectedListener) {
+        if (activity instanceof OnVideoSelectedListener && activity instanceof OnCameraSelectedListener) {
             mCallback = (OnVideoSelectedListener) activity;
+            cameraCallback = (OnCameraSelectedListener) activity;
         } else {
             throw new ClassCastException(activity.toString() + "must implement onVideoSelectedListener!!");
         }
