@@ -1,10 +1,13 @@
 package com.fiixed.videoblog;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class VideoDetailFragment extends Fragment {
 
     public static final String EXTRA_VIDEO_ID = "com.fiixed.videodiary.video_id";
+    public static final String POSITION = "position";
     private VideoData mVideo;
     private EditText mTags;
     private TextView mDate;
@@ -25,7 +29,19 @@ public class VideoDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+        menuInflater.inflate(R.menu.detail_fragment_actions, menu);
     }
 
     @Override
@@ -50,8 +66,8 @@ public class VideoDetailFragment extends Fragment {
             }
         });
 
-        mDate = (TextView) v.findViewById(R.id.detailDateTimeTextView);
-        mDate.setText(mVideo.getDate().toString());
+//        mDate = (TextView) v.findViewById(R.id.detailDateTimeTextView);
+//        mDate.setText(mVideo.getDate().toString());
 
 
         return v;
