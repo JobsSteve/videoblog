@@ -1,15 +1,11 @@
 package com.fiixed.videoblog;
 
-import android.app.Activity;
 import android.app.ActionBar;
-import android.app.Fragment;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener {
 
@@ -34,6 +30,40 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 
 
         }
+        //
+        //  Example of how to store one custom object
+        //
+        VideoData sample = new VideoData("Mal");
+
+        //save
+        Storage.getInstance().saveVideoData(this, sample);
+        //retrieve
+        VideoData newVideoData = Storage.getInstance().getVideoData(this);
+        //display (log
+//        Log.e("DATA", newVideoData.firstName + " " + newVideoData.lastName + " " + newVideoData.howAwesome + " ");
+
+
+        //
+        // Example of how to store an array of custom objects
+        //
+
+        VideoData[] sampleDataArray = {new VideoData("Zoe"),
+                new VideoData("Hoban"),
+                new VideoData("Inara"),
+                new VideoData("Kaylee")
+        };
+
+
+        //save
+        Storage.getInstance().saveVideoDataArray(this, sampleDataArray);
+        //retrieve
+        VideoData[] newDataArray = Storage.getInstance().getVideoDataArray(this);
+        //display (log)
+//        for(int i = 0; i < newDataArray.length;i++){
+//            Log.e("DATAARRAY",newDataArray[i].firstName + " "
+//                    + newDataArray[i].lastName + " "
+//                    + newDataArray[i].howAwesome + " ");
+//        }
     }
 
 //    onVideoTaken() {
@@ -56,12 +86,17 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
                 .replace(R.id.container, onePaneFragment, "DETAIL_FRAGMENT")
                 .commit();
 
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        FragmentManager fm= getFragmentManager();
+        if(fm.getBackStackEntryCount()>0){
+            fm.popBackStack();
+        }
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        return super.onOptionsItemSelected(item);
+    }
 }

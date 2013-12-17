@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Created by abell on 12/15/13.
@@ -22,10 +23,6 @@ public class VideoListFragment extends Fragment {
     VideoData[] mVideos = new VideoData[5];
     OnVideoSelectedListener mCallback;
     private ListView listView;
-
-
-
-
 
 
     // The container Activity must implement this interface so the frag can deliver messages
@@ -40,8 +37,7 @@ public class VideoListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
+
 
     }
 
@@ -51,20 +47,23 @@ public class VideoListFragment extends Fragment {
         menuInflater.inflate(R.menu.list_fragment_actions, menu);
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle presses on the action bar items
-//        switch (item.getItemId()) {
-////            case R.id.action_search:
-////                openSearch();
-////                return true;
-//            case R.id.action_video:
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                Toast.makeText(getActivity(), "Tapped search", Toast.LENGTH_SHORT).show();
+//                openSearch();
+                return true;
+            case R.id.action_video:
+                Toast.makeText(getActivity(), "Tapped camera", Toast.LENGTH_SHORT).show();
 //                getCameraInstance();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -79,26 +78,13 @@ public class VideoListFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-////        mVideos = new ArrayList<VideoData>();
-////        for(int i = 0; i < 100; i++) {
-////            VideoData v = new VideoData();
-////            v.setDate(v.getDate());
-////            v.setTags("blah blah blah");
-////            mVideos.add(v);
-////        }
-//
-//        Log.e(TAG, mVideos.toString());
-//
-//
-//    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_listview, container, false);
+//        ActionBar actionBar = getActivity().getActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(false);
         return v;
     }
 
@@ -106,11 +92,11 @@ public class VideoListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mVideos[0] = new VideoData();
-        mVideos[1] = new VideoData();
-        mVideos[2] = new VideoData();
-        mVideos[3] = new VideoData();
-        mVideos[4] = new VideoData();
+        mVideos[0] = new VideoData("test");
+        mVideos[1] = new VideoData("test");
+        mVideos[2] = new VideoData("test");
+        mVideos[3] = new VideoData("test");
+        mVideos[4] = new VideoData("test");
         VideoAdapter videoAdapter = new VideoAdapter(getActivity(), R.layout.row, mVideos);
         listView = (ListView)view.findViewById(R.id.listView);
         listView.setAdapter(videoAdapter);
