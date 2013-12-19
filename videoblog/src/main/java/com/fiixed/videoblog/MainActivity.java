@@ -7,7 +7,8 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener, VideoListFragment.OnCameraSelectedListener {
+public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener, VideoListFragment.OnCameraSelectedListener,
+        CameraFragment.OnVideoRecordedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,15 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
         getFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.container,cameraFragment)
+                .commit();
+    }
+
+    @Override
+    public void onVideoRecorded() {
+        VideoDetailFragment videoDetailFragment = new VideoDetailFragment();
+        getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.container, videoDetailFragment)
                 .commit();
     }
 }

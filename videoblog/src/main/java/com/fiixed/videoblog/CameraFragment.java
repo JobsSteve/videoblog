@@ -36,13 +36,32 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     private CameraPreview mPreview;
     private MediaRecorder mMediaRecorder;
     private Button captureButton;
+    private OnVideoRecordedListener mCallback;
     private boolean isRecording = false;
+
+    public interface OnVideoRecordedListener {
+        public void onVideoRecorded();
+    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCamera = getCameraInstance();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        //make sure the activity we're attached to actually has implemented the right callback method
+        if (activity instanceof OnVideoRecordedListener) {
+            mCallback = (OnVideoRecordedListener) activity;
+
+        } else {
+            throw new ClassCastException(activity.toString() + "must implement onVideoRecordedListener!!");
+        }
+
+
     }
 
     @Override
@@ -69,8 +88,10 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                             mCamera.lock();         // take camera access back from MediaRecorder
 
                             // inform the user that recording has stopped
-                            setCaptureButtonText("Capture");
+                            captureButton.setBackgroundColor(0xFF00FF00);
+                            setCaptureButtonText("Record");
                             isRecording = false;
+                            mCallback.onVideoRecorded();
                         } else {
                             // initialize video camera
                             if (prepareVideoRecorder()) {
@@ -80,6 +101,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
                                 // inform the user that recording has started
                                 setCaptureButtonText("Stop");
+                                captureButton.setBackgroundColor(0xFFFF0000);
                                 isRecording = true;
                             } else {
                                 // prepare didn't work, release the camera
@@ -96,7 +118,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     private boolean prepareVideoRecorder() {
 
-        mCamera = getCameraInstance();
+//        mCamera = getCameraInstance();
         mMediaRecorder = new MediaRecorder();
 
         // Step 1: Unlock and set camera to MediaRecorder

@@ -67,26 +67,26 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@id/tagsRelativeLayout"
-        android:text="@string/detail_notes_edit_text"
-        android:id="@+id/notesTextView"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:textColor="#888"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+        <!--android:layout_below="@id/tagsRelativeLayout"-->
+        <!--android:text="@string/detail_notes_edit_text"-->
+        <!--android:id="@+id/notesTextView"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:paddingTop="15dp"-->
+        <!--android:textColor="#888"/>-->
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/notesEditText"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_centerHorizontal="true"
-        android:padding="15dp" />
+    <!--<EditText-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:ems="10"-->
+        <!--android:id="@+id/notesEditText"-->
+        <!--android:layout_below="@+id/relativeLayout"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:padding="15dp" />-->
 
 
 </RelativeLayout>
