@@ -47,6 +47,23 @@ public class VideoDetailFragment extends Fragment {
         menuInflater.inflate(R.menu.detail_fragment_actions, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.ic_action_share:
+                Toast.makeText(getActivity(), "Tapped share", Toast.LENGTH_SHORT).show();
+//                openSearch();
+                return true;
+            case R.id.action_video:
+                Toast.makeText(getActivity(), "Tapped discard", Toast.LENGTH_SHORT).show();
+//                cameraCallback.onCameraSelected();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     @Override

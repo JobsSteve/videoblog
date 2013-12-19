@@ -1,8 +1,11 @@
 package com.fiixed.videoblog;
 
+import android.net.Uri;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,11 +18,15 @@ public class VideoData {
     private String mtags;
     private Date mDate;
 
-    public VideoData(String tags) {
+
+
+    private Uri mUri;
+
+    public VideoData() {
         //generate unique identifier
         mId = UUID.randomUUID();
         mDate = new Date();
-        mtags = tags;
+
     }
 
     public UUID getId() {
@@ -40,6 +47,14 @@ public class VideoData {
 
     public void setDate(Date date) {
         this.mDate = date;
+    }
+
+    public Uri getUri() {
+        return mUri;
+    }
+
+    public void setUri(Uri mUri) {
+        this.mUri = mUri;
     }
 
     /**

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 
 
 /**
@@ -18,13 +19,13 @@ public class VideoAdapter extends ArrayAdapter<VideoData> {
 
     Context mContext;
     int mLayoutResourceId;
-    VideoData[] mData;
+    ArrayList<VideoData> videoDataArrayList;
 
-    public VideoAdapter(Context context, int layoutResourceId, VideoData[] data) {
-        super(context, layoutResourceId, data);
+    public VideoAdapter(Context context, int layoutResourceId, ArrayList<VideoData> videoDataArrayList) {
+        super(context, layoutResourceId, videoDataArrayList);
         this.mContext = context;
         this.mLayoutResourceId = layoutResourceId;
-        this.mData = data;
+        this.videoDataArrayList = videoDataArrayList;
     }
 
 //    @Override
@@ -63,7 +64,7 @@ public class VideoAdapter extends ArrayAdapter<VideoData> {
         }
 
         //get the data from the data array
-        VideoData videoData = mData[position];
+        VideoData videoData = videoDataArrayList.get(position);
 
 
         //setting the view to the data we need to display

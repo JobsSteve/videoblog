@@ -6,6 +6,7 @@
     <string name="action_video">Record</string>
     <string name="action_overflow">Settings</string>
     <string name="action_share">Share</string>
+    <string name="action_discard">Delete</string>
     <string name="list_view_date_time">Thursday 31 October, 2.41pm</string>
     <string name="list_view_tag">TAGS: me, birthday, cats</string>
     <string name="detail_view_date_time">Thursday 31 October, 2.41pm</string>

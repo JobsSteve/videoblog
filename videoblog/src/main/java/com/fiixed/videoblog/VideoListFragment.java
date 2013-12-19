@@ -14,13 +14,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 /**
  * Created by abell on 12/15/13.
  */
 public class VideoListFragment extends Fragment {
 
     public static final String TAG = "VideoListFragment";
-    VideoData[] mVideos = new VideoData[5];
+    HashMap<UUID, VideoData> videoDataHashMap;
+    ArrayList<VideoData> videoDataArrayList = new ArrayList<VideoData>();
     OnVideoSelectedListener mCallback;
     OnCameraSelectedListener cameraCallback;
     private ListView listView;
@@ -29,6 +34,7 @@ public class VideoListFragment extends Fragment {
     public interface OnCameraSelectedListener {
         public void onCameraSelected();
     }
+
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnVideoSelectedListener {
         /**
@@ -41,6 +47,18 @@ public class VideoListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+
+        videoDataHashMap = Storage.getMyData(getActivity());
+
+        if (videoDataHashMap != null) {
+            for (VideoData d : videoDataHashMap.values()) {
+                videoDataArrayList.add(d);
+            }
+        } else {
+            VideoData test = new VideoData();
+            videoDataArrayList.add(0, test);
+        }
 
 
     }
@@ -84,7 +102,6 @@ public class VideoListFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_listview, container, false);
@@ -97,21 +114,18 @@ public class VideoListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mVideos[0] = new VideoData("test");
-        mVideos[1] = new VideoData("test");
-        mVideos[2] = new VideoData("test");
-        mVideos[3] = new VideoData("test");
-        mVideos[4] = new VideoData("test");
-        VideoAdapter videoAdapter = new VideoAdapter(getActivity(), R.layout.row, mVideos);
-        listView = (ListView)view.findViewById(R.id.listView);
-        listView.setAdapter(videoAdapter);
 
+        VideoAdapter videoAdapter = new VideoAdapter(getActivity(), R.layout.row, videoDataArrayList);
+        listView = (ListView) view.findViewById(R.id.listView);
+        listView.setAdapter(videoAdapter);
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCallback.onVideoSelected(position);
+
+                VideoData d = videoDataArrayList.get(position);
+                mCallback.onVideoSelected(String.valueOf(d.getId()));
             }
         });
     }

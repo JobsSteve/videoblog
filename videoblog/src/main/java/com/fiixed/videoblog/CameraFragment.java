@@ -40,7 +40,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     private boolean isRecording = false;
 
     public interface OnVideoRecordedListener {
-        public void onVideoRecorded();
+        public void displayVideoData(VideoData videoData);
     }
 
 
@@ -91,7 +91,10 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                             captureButton.setBackgroundColor(0xFF00FF00);
                             setCaptureButtonText("Record");
                             isRecording = false;
-                            mCallback.onVideoRecorded();
+                            VideoData newVideo = new VideoData();
+                            newVideo.setUri(getOutputMediaFileUri(MEDIA_TYPE_VIDEO));
+                            Storage.getInstance().add(getActivity(), newVideo);
+                            mCallback.displayVideoData(newVideo.getId());
                         } else {
                             // initialize video camera
                             if (prepareVideoRecorder()) {

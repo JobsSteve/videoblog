@@ -12,29 +12,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by abell on 12/15/13.
  */
  public class Storage {
 
-    private ArrayList<VideoData> mVideos;
-
-
-    public ArrayList<VideoData> getListOfVideos() {
-        return null;
-    }
-
-    public void addVideoToArrayList(VideoData videoData) {
-        //add another video to the ArrayList
-    }
-
     //
     // Singleton pattern here:
     //
     private static Storage storageRef;
     private Storage(){
-        //ToDo here
 
     }
     public static Storage getInstance()
@@ -49,16 +39,15 @@ import java.util.ArrayList;
     // Serialization here
     //
 
-    static String DATA_FILE = "data_file_single";
-    static String DATA_FILE_ARRAY = "data_file_single";
+    static String DATA_FILE_ARRAY = "data_file_array";
 
-    //Save a single piece of a custom class
 
-    public static boolean saveVideoData(Context context, VideoData videoData) {
+    //this method is private so we can control what gets saved.
+    private static boolean saveMyData(Context context, HashMap<UUID,VideoData> myData) {
         try {
-            FileOutputStream fos = context.openFileOutput(DATA_FILE, Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(DATA_FILE_ARRAY, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(videoData);
+            oos.writeObject(myData);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,15 +57,63 @@ import java.util.ArrayList;
         return true;
     }
 
-    public static VideoData getVideoData(Context context) {
+
+    //used to add a new video to the file
+    public static void add(Context context , VideoData videoData){
+
+        HashMap<UUID,VideoData> myData;
+
+        try{
+            myData = getMyData(context);
+            //if it doesnt exist, create one.
+            if(myData == null){
+                myData = new HashMap<UUID, VideoData>();
+            }
+
+            //This try catch is to replace the old alarm name if needed.
+            try{
+                myData.put(videoData.getId(), videoData);
+            }catch (Exception e){
+//                myData.remove(videoData.alarmName);
+//                myData.put(videoData.alarmName,videoData);
+            }
+
+            saveMyData(context,myData);
+
+        }catch(Exception e){
+
+        }
+    }
+
+
+    //will delete a video from the file
+    public static void remove(Context context , VideoData videoData){
+        HashMap<UUID,VideoData> myData;
+        try{
+            myData = getMyData(context);
+            //if it doesnt exist, stop one.
+            if(myData == null){
+                return;
+            }
+
+
+            myData.remove(videoData);
+            saveMyData(context,myData);
+        }catch(Exception e){
+
+        }
+    }
+
+    //used to get a list of all current videos.
+    public static HashMap<UUID,VideoData> getMyData(Context context) {
         try {
-            FileInputStream fis = context.openFileInput(DATA_FILE);
+            FileInputStream fis = context.openFileInput(DATA_FILE_ARRAY);
             ObjectInputStream is = new ObjectInputStream(fis);
             Object readObject = is.readObject();
             is.close();
 
-            if(readObject != null && readObject instanceof VideoData) {
-                return (VideoData) readObject;
+            if(readObject != null && readObject instanceof HashMap) {
+                return (HashMap<UUID,VideoData>) readObject;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,40 +122,4 @@ import java.util.ArrayList;
         }
         return null;
     }
-
-
-
-    public static boolean saveVideoDataArray(Context context, VideoData[] videoDatas) {
-        try {
-            FileOutputStream fos = context.openFileOutput(DATA_FILE_ARRAY, Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(videoDatas);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
 }
-
-//    public static ArrayList<VideoData> getVideoDataArray(Context context) {
-//        try {
-//            FileInputStream fis = context.openFileInput(DATA_FILE_ARRAY);
-//            ObjectInputStream is = new ObjectInputStream(fis);
-//            Object readObject = is.readObject();
-//            is.close();
-//
-//            if(readObject != null && readObject instanceof VideoData) {
-//                return (ArrayList<VideoData>) readObject;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//}
-//

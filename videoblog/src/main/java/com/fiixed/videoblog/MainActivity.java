@@ -7,6 +7,8 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import java.util.UUID;
+
 public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener, VideoListFragment.OnCameraSelectedListener,
         CameraFragment.OnVideoRecordedListener {
 
@@ -34,12 +36,12 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
         //
         //  Example of how to store one custom object
         //
-        VideoData sample = new VideoData("Mal");
+//        VideoData sample = new VideoData("Mal");
 
         //save
-        Storage.getInstance().saveVideoData(this, sample);
+//        Storage.getInstance().saveVideoData(this, sample);
         //retrieve
-        VideoData newVideoData = Storage.getInstance().getVideoData(this);
+//        VideoData newVideoData = Storage.getInstance().getVideoData(this);
         //display (log
 //        Log.e("DATA", newVideoData.firstName + " " + newVideoData.lastName + " " + newVideoData.howAwesome + " ");
 
@@ -48,15 +50,15 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
         // Example of how to store an array of custom objects
         //
 
-        VideoData[] sampleDataArray = {new VideoData("Zoe"),
-                new VideoData("Hoban"),
-                new VideoData("Inara"),
-                new VideoData("Kaylee")
-        };
+//        VideoData[] sampleDataArray = {new VideoData("Zoe"),
+//                new VideoData("Hoban"),
+//                new VideoData("Inara"),
+//                new VideoData("Kaylee")
+//        };
 
 
         //save
-        Storage.getInstance().saveVideoDataArray(this, sampleDataArray);
+//        Storage.getInstance().saveVideoDataArray(this, sampleDataArray);
         //retrieve
 //        VideoData[] newDataArray = Storage.getInstance().getVideoDataArray(this);
         //display (log)
@@ -73,12 +75,12 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 
 
     @Override
-    public void onVideoSelected(int position) {
+    public void onVideoSelected(UUID uuid) {
         VideoDetailFragment onePaneFragment = new VideoDetailFragment();
 
         Bundle args = new Bundle();
 
-        args.putInt(VideoDetailFragment.POSITION, position);
+        args.putString(VideoDetailFragment.POSITION, String.valueOf(uuid));
 
         onePaneFragment.setArguments(args);
 
@@ -111,11 +113,13 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
     }
 
     @Override
-    public void onVideoRecorded() {
+    public void displayVideoData(UUID uuid) {
         VideoDetailFragment videoDetailFragment = new VideoDetailFragment();
         getFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.container, videoDetailFragment)
                 .commit();
     }
+
+
 }
