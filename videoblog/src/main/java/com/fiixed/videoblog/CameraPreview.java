@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,83 +18,122 @@ import java.util.List;
  */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
-
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private List<Camera.Size> sizes;
-    private Context mContext;
+    private Activity mActivity;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
-        mContext = context;
         mCamera = camera;
+        mActivity = (Activity)context;
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
         mHolder = getHolder();
         mHolder.addCallback(this);
-
+        // deprecated setting, but required on Android versions prior to 3.0
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
+
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        //Tell the camera to use this surface as its preview area
-        try{
-            if(mCamera !=null) {
-                mCamera.setPreviewDisplay(holder);
-            }
-        }catch (IOException e) {
-            Log.e(TAG, "Error setting up preview display", e);
+        // The Surface has been created, now tell the camera where to draw the preview.
+        try {
+            mCamera.setPreviewDisplay(holder);
+            mCamera.startPreview();
+        } catch (IOException e) {
+            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
     }
-
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        if(mCamera == null) {
+
+        // If your preview can change or rotate, take care of those events here.
+        // Make sure to stop the preview before resizing or reformatting it.
+
+        if (mHolder.getSurface() == null) {
+            // preview surface does not exist
             return;
         }
-        //the surface has changed size, update the camera preview size
-        Camera.Parameters parameters = mCamera.getParameters();
-        Camera.Size s = getBestSupportedSize(parameters.getSupportedPictureSizes(), width, height);
-        parameters.setPreviewSize(s.width, s.height);
-        mCamera.setParameters(parameters);
-//                mCamera.setDisplayOrientation(90);
-        setCameraDisplayOrientation(1, mCamera);
-        try{
-            mCamera.startPreview();
+
+        // stop preview before making changes
+        try {
+            mCamera.stopPreview();
         } catch (Exception e) {
-            Log.e(TAG, "Could not start preview", e);
-            mCamera.release();
-            mCamera = null;
+            // ignore: tried to stop a non-existent preview
+        }
+
+        // set preview size and make any resize, rotate or
+        // reformatting changes here
+        // make any resize, rotate or reformatting changes here
+        Camera.Parameters params = mCamera.getParameters();
+        sizes = params.getSupportedPreviewSizes();
+        Log.d("PREVIEW SIZES", String.valueOf(getMaxSupportedVideoSize().width)+":"+String.valueOf(getMaxSupportedVideoSize().height));
+        params.setPreviewSize(getMaxSupportedVideoSize().width, getMaxSupportedVideoSize().height);
+        mCamera.setParameters(params);
+
+        setCameraDisplayOrientation(mActivity, 1, mCamera);
+
+
+        // start preview with new settings
+        try {
+            mCamera.setPreviewDisplay(mHolder);
+            mCamera.startPreview();
+
+        } catch (Exception e) {
+            Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }
+
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        //We can no longer display on this surface, so stop the preview
-        if(mCamera != null) {
-            mCamera.stopPreview();
-        }
+        // empty. Take care of releasing the Camera preview in your activity.
     }
-    //sets the correct camera orientation while also fixing the front camera mirroring problem
-    public void setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera) {
 
+    public Camera.Size getMaxSupportedVideoSize() {
+        int maximum = sizes.get(0).width;
+        int position = 0;
+        for (int i = 0; i < sizes.size() - 1; i++) {
+            if (sizes.get(i).width > maximum) {
+                maximum = sizes.get(i).width; // new maximum
+                position = i - 1;
+            }
+        }
+        if (position == 0) {
+            int secondMax = sizes.get(1).width;
+            position = 1;
+            for (int j = 1; j < sizes.size() - 1; j++) {
+                if (sizes.get(j).width > secondMax) {
+                    secondMax = sizes.get(j).width; // new maximum
+                    position = j;
+                }
+
+            }
+        }
+
+        return sizes.get(position);
+        // end method max
+
+    }
+
+    public static void setCameraDisplayOrientation(Activity activity,
+                                                   int cameraId, android.hardware.Camera camera) {
         android.hardware.Camera.CameraInfo info =
                 new android.hardware.Camera.CameraInfo();
-
         android.hardware.Camera.getCameraInfo(cameraId, info);
-
-
-
-//        int rotation = mContext.getWindowManager().getDefaultDisplay().getRotation();
-        int degrees = 90;
-
-//        switch (rotation) {
-//            case Surface.ROTATION_0: degrees = 0; break;
-//            case Surface.ROTATION_90: degrees = 90; break;
-//            case Surface.ROTATION_180: degrees = 180; break;
-//            case Surface.ROTATION_270: degrees = 270; break;
-//        }
+        int rotation = activity.getWindowManager().getDefaultDisplay()
+                .getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
 
         int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -104,17 +144,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
         camera.setDisplayOrientation(result);
     }
-
-    private Camera.Size getBestSupportedSize(List<Camera.Size> sizes, int width, int height) {
-        Camera.Size bestSize = sizes.get(0);
-        int largestArea = bestSize.width * bestSize.height;
-        for(Camera.Size s: sizes) {
-            int area = s.width * s.height;
-            if(area > largestArea) {
-                bestSize = s;
-                largestArea = area;
-            }
-        }
-        return bestSize;
-    }
 }
+
+
+

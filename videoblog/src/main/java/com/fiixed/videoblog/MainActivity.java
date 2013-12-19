@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
         //save
         Storage.getInstance().saveVideoDataArray(this, sampleDataArray);
         //retrieve
-        VideoData[] newDataArray = Storage.getInstance().getVideoDataArray(this);
+//        VideoData[] newDataArray = Storage.getInstance().getVideoDataArray(this);
         //display (log)
 //        for(int i = 0; i < newDataArray.length;i++){
 //            Log.e("DATAARRAY",newDataArray[i].firstName + " "

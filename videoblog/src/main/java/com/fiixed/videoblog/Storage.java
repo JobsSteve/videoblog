@@ -1,6 +1,10 @@
 package com.fiixed.videoblog;
 
 import android.content.Context;
+import android.hardware.Camera;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -97,22 +101,24 @@ import java.util.ArrayList;
 
         return true;
     }
-
-    public static VideoData[] getVideoDataArray(Context context) {
-        try {
-            FileInputStream fis = context.openFileInput(DATA_FILE_ARRAY);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            Object readObject = is.readObject();
-            is.close();
-
-            if(readObject != null && readObject instanceof VideoData[]) {
-                return (VideoData[]) readObject;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
+
+//    public static ArrayList<VideoData> getVideoDataArray(Context context) {
+//        try {
+//            FileInputStream fis = context.openFileInput(DATA_FILE_ARRAY);
+//            ObjectInputStream is = new ObjectInputStream(fis);
+//            Object readObject = is.readObject();
+//            is.close();
+//
+//            if(readObject != null && readObject instanceof VideoData) {
+//                return (ArrayList<VideoData>) readObject;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//}
+//
