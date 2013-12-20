@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by abell on 12/15/13.
@@ -40,7 +39,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     private boolean isRecording = false;
 
     public interface OnVideoRecordedListener {
-        public void displayVideoData(VideoData videoData);
+        public void displayVideoData(UUID uuid);
     }
 
 

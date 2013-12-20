@@ -5,14 +5,14 @@ import android.net.Uri;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URI;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 /**
  * Created by abell on 12/15/13.
  */
-public class VideoData {
+public class VideoData implements Serializable {
 
     private UUID mId;
     private String mtags;

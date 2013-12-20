@@ -2,11 +2,10 @@ package com.fiixed.videoblog;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,10 +22,12 @@ import java.util.UUID;
  * Created by abell on 12/15/13.
  */
 public class VideoDetailFragment extends Fragment {
+    private static final String TAG = "VideoDetailFragment";
 
     public static final String EXTRA_VIDEO_ID = "com.fiixed.videodiary.video_id";
-    public static final String POSITION = "position";
+    public static final String UUID = "uuid";
     private VideoData mVideo;
+    private UUID uuid;
     private EditText mTags;
     private TextView mDate;
 
@@ -37,6 +38,20 @@ public class VideoDetailFragment extends Fragment {
 
         ActionBar actionBar = getActivity().getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        Bundle args = getArguments();
+        if(args !=null) {
+            //Set the article to be based on what the article object says
+            uuid = java.util.UUID.fromString(args.getString(UUID));
+        }
+        Log.i(TAG, uuid.toString());
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
 
     }
 
@@ -70,6 +85,8 @@ public class VideoDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_video, container, false);
 
+        mVideo = Storage.getInstance().getVideoData(getActivity(),uuid);
+
         mTags = (EditText) v.findViewById(R.id.detailTagEditText);
         mTags.addTextChangedListener(new TextWatcher() {
             @Override
@@ -88,8 +105,8 @@ public class VideoDetailFragment extends Fragment {
             }
         });
 
-//        mDate = (TextView) v.findViewById(R.id.detailDateTimeTextView);
-//        mDate.setText(mVideo.getDate().toString());
+        mDate = (TextView) v.findViewById(R.id.detailDateTimeTextView);
+        mDate.setText(mVideo.getDate().toString());
 
 
         return v;

@@ -3,7 +3,6 @@ package com.fiixed.videoblog;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -73,14 +72,13 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 //
 //    }
 
-
     @Override
-    public void onVideoSelected(UUID uuid) {
+    public void displayVideoData(UUID uuid) {
         VideoDetailFragment onePaneFragment = new VideoDetailFragment();
 
         Bundle args = new Bundle();
 
-        args.putString(VideoDetailFragment.POSITION, String.valueOf(uuid));
+        args.putString(VideoDetailFragment.UUID, String.valueOf(uuid));
 
         onePaneFragment.setArguments(args);
 
@@ -88,8 +86,8 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
                 .addToBackStack(null)
                 .replace(R.id.container, onePaneFragment, "DETAIL_FRAGMENT")
                 .commit();
-
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -112,14 +110,8 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
                 .commit();
     }
 
-    @Override
-    public void displayVideoData(UUID uuid) {
-        VideoDetailFragment videoDetailFragment = new VideoDetailFragment();
-        getFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.container, videoDetailFragment)
-                .commit();
-    }
+
+
 
 
 }

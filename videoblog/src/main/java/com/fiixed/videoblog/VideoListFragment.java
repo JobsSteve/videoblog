@@ -1,6 +1,5 @@
 package com.fiixed.videoblog;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -40,7 +39,7 @@ public class VideoListFragment extends Fragment {
         /**
          * Called by VideoListFragment when a list item is selected
          */
-        public void onVideoSelected(int position);
+        public void displayVideoData(UUID uuid);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class VideoListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 VideoData d = videoDataArrayList.get(position);
-                mCallback.onVideoSelected(String.valueOf(d.getId()));
+                mCallback.displayVideoData(d.getId());
             }
         });
     }
