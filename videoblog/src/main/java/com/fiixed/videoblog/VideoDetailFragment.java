@@ -72,9 +72,10 @@ public class VideoDetailFragment extends Fragment  {
                 Toast.makeText(getActivity(), "Tapped share", Toast.LENGTH_SHORT).show();
 //                openSearch();
                 return true;
-            case R.id.action_video:
+            case R.id.ic_action_discard:
                 Toast.makeText(getActivity(), "Tapped discard", Toast.LENGTH_SHORT).show();
-//                cameraCallback.onCameraSelected();
+                Storage.getInstance().remove(getActivity(), mVideo.getId());
+                getActivity().finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

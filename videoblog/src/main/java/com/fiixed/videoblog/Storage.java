@@ -40,7 +40,7 @@ public class Storage {
 
 
     //this method is private so we can control what gets saved.
-    private static boolean saveMyData(Context context, HashMap<UUID, VideoData> myData) {
+    private boolean saveMyData(Context context, HashMap<UUID, VideoData> myData) {
         try {
             FileOutputStream fos = context.openFileOutput(DATA_FILE_ARRAY, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -56,7 +56,7 @@ public class Storage {
 
 
     //used to add a new video to the file
-    public static void add(Context context, VideoData videoData) {
+    public  void add(Context context, VideoData videoData) {
 
         HashMap<UUID, VideoData> myData;
 
@@ -84,7 +84,7 @@ public class Storage {
 
 
     //will delete a video from the file
-    public static void remove(Context context, VideoData videoData) {
+    public  void remove(Context context, UUID uuid) {
         HashMap<UUID, VideoData> myData;
         try {
             myData = getMyData(context);
@@ -92,9 +92,9 @@ public class Storage {
             if (myData == null) {
                 return;
             }
+//            VideoData objectToRemove = myData.get(uuid);
 
-
-            myData.remove(videoData);
+            myData.remove(uuid);
             saveMyData(context, myData);
         } catch (Exception e) {
 
@@ -102,7 +102,7 @@ public class Storage {
     }
 
     //retrieves a single VideoData object
-    public static VideoData getVideoData(Context context, UUID uuid) {
+    public VideoData getVideoData(Context context, UUID uuid) {
         HashMap<UUID, VideoData> myData;
         try {
             myData = getMyData(context);
@@ -121,7 +121,7 @@ public class Storage {
     }
 
     //used to get a list of all current videos.
-    public static HashMap<UUID, VideoData> getMyData(Context context) {
+    public HashMap<UUID, VideoData> getMyData(Context context) {
         try {
             FileInputStream fis = context.openFileInput(DATA_FILE_ARRAY);
             ObjectInputStream is = new ObjectInputStream(fis);

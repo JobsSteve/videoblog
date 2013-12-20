@@ -48,7 +48,7 @@ public class VideoListFragment extends Fragment {
         setHasOptionsMenu(true);
 
 
-        videoDataHashMap = Storage.getMyData(getActivity());
+        videoDataHashMap = Storage.getInstance().getMyData(getActivity());
 
         if (videoDataHashMap != null) {
             for (VideoData d : videoDataHashMap.values()) {
