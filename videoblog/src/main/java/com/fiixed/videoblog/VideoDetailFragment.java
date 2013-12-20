@@ -2,6 +2,7 @@ package com.fiixed.videoblog;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,7 +22,7 @@ import java.util.UUID;
 /**
  * Created by abell on 12/15/13.
  */
-public class VideoDetailFragment extends Fragment {
+public class VideoDetailFragment extends Fragment  {
     private static final String TAG = "VideoDetailFragment";
 
     public static final String EXTRA_VIDEO_ID = "com.fiixed.videodiary.video_id";
@@ -54,6 +55,7 @@ public class VideoDetailFragment extends Fragment {
 
 
     }
+
 
 
     @Override
@@ -111,4 +113,5 @@ public class VideoDetailFragment extends Fragment {
 
         return v;
     }
+
 }

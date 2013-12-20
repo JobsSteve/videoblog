@@ -20,7 +20,7 @@ public class VideoData implements Serializable {
 
 
 
-    private Uri mUri;
+    private String mUri;
 
     public VideoData() {
         //generate unique identifier
@@ -50,11 +50,18 @@ public class VideoData implements Serializable {
     }
 
     public Uri getUri() {
-        return mUri;
+
+        //convert String to uri
+        Uri uri;
+        return uri = Uri.parse(mUri);
     }
 
-    public void setUri(Uri mUri) {
-        this.mUri = mUri;
+    public void setUri(Uri uri) {
+
+        //convert Uri to String
+
+        mUri = uri.toString();
+
     }
 
     /**

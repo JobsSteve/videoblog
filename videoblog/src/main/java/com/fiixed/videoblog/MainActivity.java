@@ -4,12 +4,15 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.UUID;
 
 public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener, VideoListFragment.OnCameraSelectedListener,
         CameraFragment.OnVideoRecordedListener {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,8 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
             getFragmentManager().beginTransaction()
                     .add(R.id.container, videoListFragment)
                     .commit();
+
+
 
 
         }
@@ -72,19 +77,22 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 //
 //    }
 
+
+
+
     @Override
     public void displayVideoData(UUID uuid) {
-        VideoDetailFragment onePaneFragment = new VideoDetailFragment();
+        VideoDetailFragment videoDetailFragment = new VideoDetailFragment();
 
         Bundle args = new Bundle();
 
         args.putString(VideoDetailFragment.UUID, String.valueOf(uuid));
 
-        onePaneFragment.setArguments(args);
+        videoDetailFragment.setArguments(args);
 
         getFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.container, onePaneFragment, "DETAIL_FRAGMENT")
+                .replace(R.id.container, videoDetailFragment, "VideoDetailFragment")
                 .commit();
     }
 
@@ -103,12 +111,31 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 
     @Override
     public void onCameraSelected() {
-        CameraFragment cameraFragment = new CameraFragment();
-        getFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.container,cameraFragment)
+//        CameraFragment cameraFragment = new CameraFragment();
+//        getFragmentManager().beginTransaction()
+//                .addToBackStack(null)
+//                .replace(R.id.container,cameraFragment)
+//                .commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container,new CameraFragment(), "CameraFragment")
+                .addToBackStack("A_B_TAG")
                 .commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().findFragmentByTag("VideoDetailFragment") != null) {
+            // I'm viewing VideoDetailFragment
+            getFragmentManager().popBackStack("A_B_TAG",
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+
 
 
 
