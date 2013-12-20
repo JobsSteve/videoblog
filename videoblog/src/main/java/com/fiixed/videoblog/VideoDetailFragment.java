@@ -2,7 +2,7 @@ package com.fiixed.videoblog;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,11 +11,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import java.util.UUID;
 
@@ -31,6 +35,9 @@ public class VideoDetailFragment extends Fragment  {
     private UUID uuid;
     private EditText mTags;
     private TextView mDate;
+    private ImageView mImageView;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,9 +93,17 @@ public class VideoDetailFragment extends Fragment  {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_video, container, false);
+        View v = inflater.inflate(R.layout.fragment_detail, container, false);
 
         mVideo = Storage.getInstance().getVideoData(getActivity(),uuid);
+
+        mImageView = (ImageView)v.findViewById(R.id.videoView);
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         mTags = (EditText) v.findViewById(R.id.detailTagEditText);
         mTags.addTextChangedListener(new TextWatcher() {

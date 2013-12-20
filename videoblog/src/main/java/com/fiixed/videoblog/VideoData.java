@@ -1,5 +1,6 @@
 package com.fiixed.videoblog;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -17,6 +18,16 @@ public class VideoData implements Serializable {
     private UUID mId;
     private String mtags;
     private Date mDate;
+
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
+
+    public void setBitmap(Bitmap mBitmap) {
+        this.mBitmap = mBitmap;
+    }
+
+    private Bitmap mBitmap;
 
 
 

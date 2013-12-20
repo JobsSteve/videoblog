@@ -2,12 +2,18 @@ package com.fiixed.videoblog;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.CursorLoader;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -73,7 +79,6 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         preview.addView(mPreview);
 
 
-
 // Add a listener to the Capture button
         captureButton = (Button) v.findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
@@ -92,6 +97,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                             isRecording = false;
                             VideoData newVideo = new VideoData();
                             newVideo.setUri(getOutputMediaFileUri(MEDIA_TYPE_VIDEO));
+
+
                             Storage.getInstance().add(getActivity(), newVideo);
                             mCallback.displayVideoData(newVideo.getId());
                         } else {
@@ -262,4 +269,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
+
+
+
+
 }
