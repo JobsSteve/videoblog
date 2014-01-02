@@ -28,6 +28,7 @@ public class VideoListFragment extends Fragment {
     OnVideoSelectedListener mCallback;
     OnCameraSelectedListener cameraCallback;
     private ListView listView;
+    VideoAdapter videoAdapter;
 
 
     public interface OnCameraSelectedListener {
@@ -114,7 +115,7 @@ public class VideoListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        VideoAdapter videoAdapter = new VideoAdapter(getActivity(), R.layout.row, videoDataArrayList);
+        videoAdapter = new VideoAdapter(getActivity(), R.layout.row, videoDataArrayList);
         listView = (ListView) view.findViewById(R.id.listView);
         listView.setAdapter(videoAdapter);
 
@@ -129,5 +130,9 @@ public class VideoListFragment extends Fragment {
         });
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((VideoAdapter)listView.getAdapter()).notifyDataSetChanged();
+    }
 }

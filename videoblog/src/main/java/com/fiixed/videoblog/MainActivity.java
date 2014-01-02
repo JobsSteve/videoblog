@@ -31,6 +31,8 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 
             getFragmentManager().beginTransaction()
                     .add(R.id.container, videoListFragment)
+                    //add this transaction to the back stack
+//                    .addToBackStack(null)
                     .commit();
 
 
