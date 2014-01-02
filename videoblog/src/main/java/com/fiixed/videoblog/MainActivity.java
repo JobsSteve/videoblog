@@ -3,6 +3,7 @@ package com.fiixed.videoblog;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import java.util.UUID;
 public class MainActivity extends Activity implements VideoListFragment.OnVideoSelectedListener, VideoListFragment.OnCameraSelectedListener,
         CameraFragment.OnVideoRecordedListener {
 
+    public final String TAG = "com.fiixed.videoblog.MainActivity";
 
 
     @Override
@@ -30,12 +32,8 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
             videoListFragment.setArguments(getIntent().getExtras());
 
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, videoListFragment)
-                    //add this transaction to the back stack
-//                    .addToBackStack(null)
+                    .replace(R.id.container, videoListFragment, "VideoListFragment")
                     .commit();
-
-
 
 
         }
@@ -80,21 +78,15 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
 //    }
 
 
-
-
     @Override
     public void displayVideoData(UUID uuid) {
         VideoDetailFragment videoDetailFragment = new VideoDetailFragment();
-
         Bundle args = new Bundle();
-
         args.putString(VideoDetailFragment.UUID, String.valueOf(uuid));
-
         videoDetailFragment.setArguments(args);
-
         getFragmentManager().beginTransaction()
-                .addToBackStack(null)
                 .replace(R.id.container, videoDetailFragment, "VideoDetailFragment")
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -102,10 +94,10 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        FragmentManager fm= getFragmentManager();
-        if(fm.getBackStackEntryCount()>0){
-            fm.popBackStack();
-        }
+//        FragmentManager fm= getFragmentManager();
+//        if(fm.getBackStackEntryCount()>0){
+//            fm.popBackStack();
+//        }
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         return super.onOptionsItemSelected(item);
@@ -115,32 +107,35 @@ public class MainActivity extends Activity implements VideoListFragment.OnVideoS
     public void onCameraSelected() {
 //        CameraFragment cameraFragment = new CameraFragment();
 //        getFragmentManager().beginTransaction()
-//                .addToBackStack(null)
-//                .replace(R.id.container,cameraFragment)
+//                .replace(R.id.container, cameraFragment)
 //                .commit();
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container,new CameraFragment(), "CameraFragment")
-                .addToBackStack("A_B_TAG")
+                .replace(R.id.container, new CameraFragment(), "CameraFragment")
+                .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().findFragmentByTag("VideoDetailFragment") != null) {
-            // I'm viewing VideoDetailFragment
-            getFragmentManager().popBackStack("A_B_TAG",
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        int depth = getFragmentManager().getBackStackEntryCount();
+        Log.e(TAG, String.valueOf(depth));
+        if (getFragmentManager().findFragmentByTag("VideoListFragment").isVisible()) {
+            // exit app
+            finish();
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().findFragmentByTag("VideoDetailFragment").isVisible()) {
+                // I'm viewing VideoDetailFragment
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new VideoListFragment())
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
-
-
-
-
-
-
 
 
 }

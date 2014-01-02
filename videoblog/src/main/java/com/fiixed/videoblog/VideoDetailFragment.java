@@ -75,7 +75,10 @@ public class VideoDetailFragment extends Fragment  {
             case R.id.ic_action_discard:
                 Toast.makeText(getActivity(), "Tapped discard", Toast.LENGTH_SHORT).show();
                 Storage.getInstance().remove(getActivity(), mVideo.getId());
-                getActivity().finish();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new VideoListFragment())
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,6 +113,8 @@ public class VideoDetailFragment extends Fragment  {
 
         mDate = (TextView) v.findViewById(R.id.detailDateTimeTextView);
         mDate.setText(mVideo.getDate().toString());
+
+
 
 
         return v;
